@@ -1,0 +1,46 @@
+{% extends "index.html" %}
+
+{% block title %}My Results | MindMapper{% endblock %}
+  
+{% block content %}
+    <!-- Results Section -->
+    <main class="results">
+      <h1 class="section-title">📝 My Career Assessment Results</h1>
+      <p class="section-subtitle">Based on your responses, here’s a personalized insight into your career path and personality traits.</p>
+
+      <!-- Basic Test -->
+      {% if basic_result %}
+  <section class="result-card">
+    <h2>📌 Basic Test Result</h2>
+    <div class="result-content">
+      <p><strong>Suggested Field:</strong> <span class="highlight">{{ basic_result }}</span></p>
+      <p><strong>Reason:</strong> This is based on your responses to the personality test.</p>
+    </div>
+  </section>
+  {% else %}
+  <p>You haven't completed the basic test yet.</p>
+  {% endif %}
+
+      <!-- Personality Traits -->
+      <section class="result-card">
+        <h2>🧠 Personality Traits</h2>
+        <ul class="result-list">
+          <li>• Logical Thinker</li>
+          <li>• Curious and Inquisitive</li>
+          <li>• Practical Problem Solver</li>
+          <li>• Attention to Detail</li>
+        </ul>
+      </section>
+
+      <!-- Recommendations -->
+      <section class="result-card">
+        <h2>🚀 Suggested Next Steps</h2>
+        <ul class="result-list">
+          <li>• Research top colleges offering Mechanical Engineering</li>
+          <li>• Enroll in workshops or internships in the engineering field</li>
+          <li>• Build technical projects (e.g., robotics kits, mechanical models)</li>
+          <li>• Follow engineering content on YouTube, blogs, and magazines</li>
+        </ul>
+      </section>
+    </main>
+{% endblock %}
