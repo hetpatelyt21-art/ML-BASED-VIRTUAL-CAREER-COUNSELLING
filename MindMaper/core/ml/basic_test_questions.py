@@ -1,0 +1,22 @@
+basic_test_questions = {
+1 : "I enjoy solving problems using logic or math.",
+2 : "I find it easy to explain concepts clearly to others.",
+3 : "I often come up with new ideas for businesses or products.",
+4 : "I am curious about how the human mind and behavior work.",
+5 : "I enjoy caring for others and ensuring their well-being.",
+6 : "I like creating art, designs, or digital media.",
+7 : "I am interested in how computers, apps, or the internet work.",
+8 : "I feel confident speaking to groups or leading discussions.",
+9 : "I am drawn to nature and protecting the environment.",
+10 : "I enjoy reading, writing, or analyzing literature.",
+11 : "I like working with data, statistics, or graphs.",
+12 : "I am passionate about justice and helping people legally.",
+13 : "I find fulfillment in physical activity or fitness coaching.",
+14 : "I often think about how to lead or manage people effectively.",
+15 : "I am comfortable with technical tools and scientific equipment.",
+16 : "I enjoy helping others deal with emotional or personal issues.",
+17 : "I like staying up to date with political or legal events.",
+18 : "I enjoy tracking financial data or creating budgets.",
+19 : "I prefer hands-on work or being in a natural environment.",
+20 : "I aspire to build something of my own in the future."
+}

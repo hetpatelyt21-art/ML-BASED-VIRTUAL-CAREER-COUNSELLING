@@ -1,0 +1,130 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>
+    {% block title %}Career Guidance - MindMapper{% endblock %}
+  </title>
+  <link rel="stylesheet" href="{% static 'css/style.css' %}">
+</head>
+
+<body>
+
+  <!-- Navbar -->
+{% block navbar %}
+<nav>
+  <div class="logo">MindMapper</div>
+  <ul class="nav-links">
+    <li><a href="{% url 'home' %}">Home</a></li>
+    <li><a href="{% url 'about' %}">About</a></li>
+
+    <!-- Test Dropdown -->
+    <li class="test-menu">
+      <a href="#" onclick="toggleTestDropdown()">Take a Test ⬇</a>
+      <div class="dropdown-content" id="test-dropdown">
+        <a href="{% url 'basic_test' %}">Basic Test</a>
+        {% comment %} <a href="{% url 'advanced_test' %}">Advanced Test</a> {% endcomment %}
+      </div>
+    </li>
+
+    <!-- Profile Dropdown -->
+    <li class="profile-menu">
+        {% if user.userprofile.profile_photo %}
+    <img src="{{ user.userprofile.profile_photo.url }}" alt="Profile" class="profile-icon" onclick="toggleProfileDropdown()" />
+  {% else %}
+    <img src="{% static 'assets/profile.png' %}" alt="Profile" class="profile-icon" onclick="toggleProfileDropdown()" />
+  {% endif %}
+
+      {% comment %} <img src="{% static 'assets/profile.png' %}" alt="Profile" class="profile-icon" onclick="toggleProfileDropdown()" /> {% endcomment %}
+      <div class="dropdown-content" id="profile-dropdown">
+        {% if user.is_authenticated %}
+          <a href="{% url 'profile' %}">View Profile</a>
+          <a href="{% url 'results' %}">View Results</a>
+          <a href="{% url 'logout' %}">Logout</a>
+        {% else %}
+          <a href="{% url 'login' %}">Login</a>
+          <a href="{% url 'register' %}">Sign Up</a>
+        {% endif %}
+      </div>
+    </li>
+
+    <!-- Theme Toggle -->
+    <li>
+      <button id="theme-toggle" class="theme-toggle">Toggle Theme</button>
+    </li>
+  </ul>
+</nav>
+{% endblock %}
+
+
+  {% block content %}
+  <!-- Hero Section -->
+  <section class="hero">
+    <h1>Discover Your Future with <span class="highlight">MindMapper</span></h1>
+    <p>
+      MindMapper is an intelligent personality assessment and career guidance system
+      designed to help you discover the right path based on your personality, interests, and aptitude.
+      <br><br>
+      Start with the <strong>Basic Test</strong> to find your ideal field (e.g., Engineering, Medicine, Law),
+      then proceed to the <strong>Advanced Test</strong> to receive tailored career suggestions like Mechanical
+      Engineer,
+      Psychotherapist, or Software Developer — all powered by our ML engine.
+    </p>
+    <a href="{% url "basic_test" %}" class="btn-primary">Start Your Journey</a>
+  </section>
+
+  <!-- Features Section -->
+  <section class="features">
+    <h2>🔍 Why Choose MindMapper?</h2>
+    <div class="feature-grid">
+      <div class="feature">
+        <h3>🧠 Smart Assessments</h3>
+        <p>Backed by machine learning to give accurate predictions tailored to your unique personality and strengths.
+        </p>
+      </div>
+      <div class="feature">
+        <h3>📊 Dual-Level Testing</h3>
+        <p>Two-stage testing — first to guide your field, then your exact career path based on aptitude and mindset.</p>
+      </div>
+      <div class="feature">
+        <h3>🎯 Personalized Results</h3>
+        <p>Receive personalized reports with detailed insights and recommended next steps for your career journey.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Testimonials -->
+  <section class="testimonials">
+    <h2>💬 What Our Users Say</h2>
+
+    <div class="testimonial">
+      “MindMapper helped me figure out that I'm a natural fit for psychology. The test was so accurate!”
+      <span>– Piyush P., Student</span>
+    </div>
+
+    <div class="testimonial">
+      “I was confused between engineering and law. The system guided me with clarity.”
+      <span>– Ramesh K., 12th Grade</span>
+    </div>
+
+    <div class="testimonial">
+      “This tool is a must for every student. The advanced test even recommended niche careers!”
+      <span>– Ananya R., Career Coach</span>
+    </div>
+  </section>
+  {% endblock %}
+  <!-- Footer -->
+   
+  <footer>
+    {% block footer %}
+    &copy; 2025 MindMapper. All rights reserved. | Built with ❤️ to help you succeed.
+    {% endblock %}
+  </footer>
+
+  <script src="{% static 'js/scripts.js' %}"></script>
+</body>
+
+</html>
