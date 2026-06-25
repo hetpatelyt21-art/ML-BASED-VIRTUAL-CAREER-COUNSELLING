@@ -1,0 +1,20 @@
+{% extends "website/base.html" %}
+
+{% block title %}Feedback | Mentoraa{% endblock %}
+
+{% block content %}
+  <section class="section-box section-zoom feedback-shell">
+    <div class="container">
+      <h2>Feedback</h2>
+      <p class="section-intro">We read this closely. Share bugs, suggestions, or ideas for the next version.</p>
+      <form method="post" class="contact-form feedback-form-card">
+        {% csrf_token %}
+        {% for field in form %}
+          {{ field.errors }}
+          {{ field }}
+        {% endfor %}
+        <button type="submit" class="btn">Submit Feedback</button>
+      </form>
+    </div>
+  </section>
+{% endblock %}

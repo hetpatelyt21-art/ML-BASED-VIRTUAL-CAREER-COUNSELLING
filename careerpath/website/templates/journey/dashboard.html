@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Dashboard</title>
+  <link rel="stylesheet" href="/static/website/css/style.css">
+</head>
+<body>
+
+<div class="container" style="color:var(--secondary);">
+  <h1>Your Dashboard</h1>
+
+  <h2>Career Roadmap</h2>
+  {% if roadmap %}
+    <p><strong>Target Role:</strong> {{ roadmap.target_role }}</p>
+  {% else %}
+    <p>No roadmap yet.</p>
+  {% endif %}
+
+  <h2>Today's Tasks</h2>
+
+  {% for task in tasks %}
+    <div class="card">
+      <p>{{ task.title }}</p>
+
+      {% if not task.completed %}
+        <a href="{% url 'complete_task' task.id %}" class="btn-primary">Complete</a>
+      {% else %}
+        <span>✅ Done</span>
+      {% endif %}
+    </div>
+  {% endfor %}
+
+</div>
+
+</body>
+</html>

@@ -1,0 +1,187 @@
+{% extends "website/base.html" %}
+
+{% block title %}Your Career Result | Mentoraa{% endblock %}
+
+{% block content %}
+  <section class="section-box section-zoom">
+    <div class="container">
+      {% if has_result_data %}
+        <button type="button" class="back-button section-back-button" onclick="goBack('{% url 'advanced_test' %}?domain={{ domain|urlencode }}')">
+          <i class="fas fa-arrow-left"></i> Back
+        </button>
+      {% endif %}
+      <h2>Your Career Match</h2>
+      {% if has_result_data %}
+        <p class="section-intro">Based on your answers, we recommend the following career path:</p>
+      {% else %}
+        <p class="section-intro">No assessment data is active in this session yet.</p>
+      {% endif %}
+
+      <div class="result-card result-card-wide">
+        {% if has_result_data %}
+          <div class="insight-card best-role-card">
+            <h4>Best Matched Role</h4>
+            <p>The model predicts <strong>{{ career_name }}</strong> as your strongest current fit.</p>
+          </div>
+          <h3>Recommended Career: <span id="career-name">{{ career_name }}</span></h3>
+          <div class="result-stats">
+            <div class="stat-chip">
+              <span class="stat-label">Match</span>
+              <strong id="match-score">{{ match_score }}%</strong>
+            </div>
+            <div class="stat-chip">
+              <span class="stat-label">Model Confidence</span>
+              <strong>{{ model_confidence }}%</strong>
+            </div>
+            <div class="stat-chip">
+              <span class="stat-label">Advanced Score</span>
+              <strong>{{ advanced_score }}%</strong>
+            </div>
+          </div>
+          <p><strong>Domain:</strong> <span id="career-domain">{{ domain }}</span></p>
+
+          <div class="career-description">
+            <p>{{ career_description }}</p>
+          </div>
+
+          {% if roadmap_summary %}
+            <div class="insight-card">
+              <h4>Roadmap Summary</h4>
+              <p>{{ roadmap_summary }}</p>
+            </div>
+          {% endif %}
+
+          {% if required_skills %}
+            <div class="insight-card">
+              <h4>Required Skills</h4>
+              <div class="skill-chip-list">
+                {% for skill in required_skills %}
+                  <span class="skill-chip">{{ skill }}</span>
+                {% endfor %}
+              </div>
+            </div>
+          {% endif %}
+
+          {% if top_industries %}
+            <div class="insight-card">
+              <h4>Top Industries</h4>
+              <div class="skill-chip-list">
+                {% for industry in top_industries %}
+                  <span class="skill-chip">{{ industry }}</span>
+                {% endfor %}
+              </div>
+            </div>
+          {% endif %}
+
+          <div class="result-stats">
+            <div class="stat-chip">
+              <span class="stat-label">Salary Outlook</span>
+              <strong>{{ salary_text }}</strong>
+            </div>
+            <div class="stat-chip">
+              <span class="stat-label">Outlook</span>
+              <strong>{{ outlook_text }}</strong>
+            </div>
+          </div>
+          <p class="result-source-note">Career facts sourced from {{ facts_source }}.</p>
+
+          {% if top_traits %}
+            <div class="insight-card">
+              <h4>Why this was predicted</h4>
+              <p>Your strongest signals came from {{ top_traits|join:" and " }}.</p>
+            </div>
+          {% endif %}
+
+          {% if top_matches %}
+            <div class="insight-card">
+              <h4>Top model matches</h4>
+              <ul class="prediction-list">
+                {% for name, score in top_matches %}
+                  <li>{{ name }}: {{ score }}%</li>
+                {% endfor %}
+              </ul>
+            </div>
+          {% endif %}
+
+          {% if resources %}
+            <div class="insight-card">
+              <h4>Learning Resources</h4>
+              <ul class="source-list">
+                {% for source in resources %}
+                  <li>
+                    <a href="{{ source.url }}" target="_blank" rel="noreferrer">{{ source.title }}</a>
+                    <span>{{ source.type }}</span>
+                  </li>
+                {% endfor %}
+              </ul>
+            </div>
+          {% endif %}
+
+          {% if courses %}
+            <div class="insight-card">
+              <h4>Online Courses</h4>
+              <ul class="source-list">
+                {% for course in courses %}
+                  <li>
+                    <a href="{{ course.url }}" target="_blank" rel="noreferrer">{{ course.title }}</a>
+                    <span>{{ course.provider }}</span>
+                  </li>
+                {% endfor %}
+              </ul>
+            </div>
+          {% endif %}
+
+          {% if videos %}
+            <div class="insight-card">
+              <h4>Recommended Videos</h4>
+              <div class="video-grid">
+                {% for video in videos %}
+                  <div class="video-card">
+                    <div class="video-frame">
+                      <iframe
+                        src="{{ video.embed_url }}"
+                        title="{{ video.title }}"
+                        loading="lazy"
+                        allow="accelerometer; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                        allowfullscreen></iframe>
+                    </div>
+                    <strong>{{ video.title }}</strong>
+                  </div>
+                {% endfor %}
+              </div>
+            </div>
+          {% endif %}
+
+          {% if request.user.is_authenticated %}
+            <p class="result-status">This result is linked to your account and can be reviewed from your profile.</p>
+          {% else %}
+            <p class="result-status">Create an account to save your result history and edit your career profile.</p>
+          {% endif %}
+
+          <div class="form-actions">
+            {% if request.user.is_authenticated %}
+              <a href="{% url 'profile' %}" class="btn">Open Profile</a>
+              <a href="{% url 'analytics_dashboard' %}" class="btn">Open Dashboard</a>
+              <a href="{% url 'roadmap_dashboard' %}" class="btn-bordered">View Roadmap</a>
+              <a href="{% url 'skill_gap_dashboard' %}" class="btn-bordered">Skill Gap</a>
+              <a href="{% url 'resume_edit' %}" class="btn-bordered">Build Resume</a>
+              <a href="{% url 'resume_analyzer' %}" class="btn-bordered">Analyze Resume</a>
+            {% endif %}
+          </div>
+        {% else %}
+          <div class="insight-card">
+            <h4>No Active Assessment</h4>
+            <p>Start a new assessment to generate a result, career summary, skills, and learning resources.</p>
+          </div>
+        {% endif %}
+
+        <div class="form-actions">
+          {% if has_result_data %}
+            <a href="{% url 'advanced_test' %}?domain={{ domain|urlencode }}" class="btn-bordered">Retake Advanced Test</a>
+          {% endif %}
+          <a href="{% url 'basic_test' %}" class="btn-bordered">Start Over</a>
+        </div>
+      </div>
+    </div>
+  </section>
+{% endblock %}

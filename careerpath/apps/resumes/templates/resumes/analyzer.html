@@ -1,0 +1,48 @@
+{% extends "website/base.html" %}
+
+{% block title %}Resume Analyzer | Mentoraa{% endblock %}
+
+{% block content %}
+<section class="section-box section-zoom">
+  <div class="container">
+    <h2>AI Resume Analyzer</h2>
+    <p class="section-intro">Upload a PDF or DOCX resume for ATS scoring, keyword coverage, weak bullets, and role-specific suggestions.</p>
+    <form method="post" enctype="multipart/form-data" class="auth-form result-card">
+      {% csrf_token %}
+      {{ form.as_p }}
+      <button type="submit" class="btn">Analyze Resume</button>
+    </form>
+
+    {% if analyses %}
+      <div class="roadmap-grid">
+        {% for analysis in analyses %}
+          <div class="insight-card">
+            <h4>{{ analysis.target_role }} · {{ analysis.ats_score }}%</h4>
+            <p>{{ analysis.original_filename }}</p>
+            <div class="progress-bar"><span style="width: {{ analysis.ats_score }}%"></span></div>
+            <strong>Matched Keywords</strong>
+            <div class="skill-chip-list">
+              {% for keyword in analysis.keyword_matches %}
+                <span class="skill-chip">{{ keyword }}</span>
+              {% empty %}
+                <span class="skill-chip">No role keywords detected</span>
+              {% endfor %}
+            </div>
+            <strong>Missing Keywords</strong>
+            <div class="skill-chip-list">
+              {% for keyword in analysis.missing_keywords %}
+                <span class="skill-chip">{{ keyword }}</span>
+              {% endfor %}
+            </div>
+            <ul class="prediction-list">
+              {% for suggestion in analysis.improvement_suggestions %}
+                <li>{{ suggestion }}</li>
+              {% endfor %}
+            </ul>
+          </div>
+        {% endfor %}
+      </div>
+    {% endif %}
+  </div>
+</section>
+{% endblock %}

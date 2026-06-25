@@ -1,0 +1,144 @@
+{% extends "website/base.html" %}
+
+{% block title %}Profile | Mentoraa{% endblock %}
+
+{% block content %}
+  <header class="hero hero-short">
+    <nav class="navbar">
+      <a href="{% url 'home' %}" class="logo">
+        <span>Mentoraa</span>
+      </a>
+      <ul class="nav-links">
+        <li><a href="{% url 'home' %}">Home</a></li>
+        <li><a href="{% url 'home' %}#contact">Feedback</a></li>
+        <li><a href="{% url 'logout' %}">Logout</a></li>
+      </ul>
+    </nav>
+    <div class="hero-content hero-content-short">
+      <h1>Your <span class="highlight">Profile</span></h1>
+    </div>
+  </header>
+
+  <section id="profile" class="section-box section-zoom">
+    <button type="button" class="back-button section-back-button" onclick="goBack('{% url 'home' %}')">
+          <i class="fas fa-arrow-left"></i> Back
+        </button>
+    <div class="container profile-container">
+      <div class="profile-card">
+        <h2>{{ request.user.get_full_name|default:request.user.username }}</h2>
+        <p><i class="fas fa-envelope"></i> {{ request.user.email }}</p>
+        <p><i class="fas fa-calendar"></i> Joined: {{ request.user.date_joined|date:"M Y" }}</p>
+        <p><i class="fas fa-comment-dots"></i> Feedback Sent: {{ feedback_count }}</p>
+      </div>
+
+      <div class="profile-summary">
+        <h3>Edit Profile</h3>
+        <p class="section-intro profile-intro">Keep your account details up to date. Career matching now comes directly from your assessments.</p>
+        <form method="post" class="profile-edit-form">
+          {% csrf_token %}
+          {{ user_form.non_field_errors }}
+          {{ profile_form.non_field_errors }}
+          {% for field in user_form %}
+            {{ field.errors }}
+            {{ field }}
+          {% endfor %}
+          {% for field in profile_form %}
+            <label for="{{ field.id_for_label }}" class="form-label">{{ field.label }}</label>
+            {{ field.errors }}
+            {{ field }}
+          {% endfor %}
+          <button type="submit" class="btn">Save Profile</button>
+        </form>
+      </div>
+    </div>
+  </section>
+
+  <section class="section-box section-zoom">
+    <div class="container profile-results-grid">
+      <div class="profile-summary">
+        <h3>Assessment Hub</h3>
+        <div class="hero-actions">
+          <a href="{% url 'basic_test' %}" class="btn">Take Assessment</a>
+          <a href="{% url 'results' %}" class="btn btn-secondary">Latest Result</a>
+        </div>
+      </div>
+      <div class="profile-summary">
+        <h3>Resume Builder</h3>
+        <div class="hero-actions">
+          <a href="{% url 'resume_edit' %}" class="btn">Edit Resume</a>
+          <a href="{% url 'resume_preview' %}" class="btn btn-secondary">Preview Resume</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section-box alt-bg section-zoom">
+    <div class="container profile-results-grid">
+      <div class="profile-summary">
+        <h3>Best Matched Role</h3>
+        {% if latest_result %}
+          <div class="best-role-card">
+            <strong>{{ latest_result.career_name }}</strong>
+            <p>{{ latest_result.career_description }}</p>
+            <div class="result-stats">
+              <div class="stat-chip">
+                <span class="stat-label">Predicted Match</span>
+                <strong>{{ latest_result.match_score }}%</strong>
+              </div>
+              <div class="stat-chip">
+                <span class="stat-label">Model Confidence</span>
+                <strong>{{ latest_result.model_confidence }}%</strong>
+              </div>
+            </div>
+          </div>
+        {% else %}
+          <p class="empty-state">Finish an assessment to see the role predicted by the model.</p>
+          <a href="{% url 'basic_test' %}" class="btn">Take Assessment</a>
+        {% endif %}
+      </div>
+
+      <div class="profile-summary">
+        <h3>Latest Assessment</h3>
+        {% if latest_result %}
+          <ul class="profile-info">
+            <li><strong>Top Career:</strong> {{ latest_result.career_name }}</li>
+            <li><strong>Domain:</strong> {{ latest_result.domain }}</li>
+            <li><strong>Match Score:</strong> {{ latest_result.match_score }}%</li>
+            <li><strong>Model Confidence:</strong> {{ latest_result.model_confidence }}%</li>
+            <li><strong>Saved On:</strong> {{ latest_result.created_at|date:"M d, Y" }}</li>
+          </ul>
+          <a href="{% url 'results' %}" class="btn">View Result</a>
+        {% else %}
+          <p class="empty-state">You have not completed an assessment yet.</p>
+          <a href="{% url 'basic_test' %}" class="btn">Take Assessment</a>
+        {% endif %}
+      </div>
+
+      <div class="profile-summary">
+        <h3>Recent History</h3>
+        {% if recent_results %}
+          <ul class="history-list">
+            {% for result in recent_results %}
+              <li>
+                <strong>{{ result.career_name }}</strong>
+                <span>{{ result.match_score }}% match on {{ result.created_at|date:"M d, Y" }}</span>
+              </li>
+            {% endfor %}
+          </ul>
+        {% else %}
+          <p class="empty-state">Complete a test to start building your history.</p>
+        {% endif %}
+      </div>
+    </div>
+  </section>
+
+  <footer class="footer">
+    <p>&copy; 2025 Mentoraa. All rights reserved.</p>
+    <div class="social-icons">
+      <a href="#"><i class="fab fa-linkedin-in"></i></a>
+      <a href="#"><i class="fab fa-twitter"></i></a>
+      <a href="#"><i class="fab fa-github"></i></a>
+      <a href="#"><i class="fas fa-envelope"></i></a>
+    </div>
+  </footer>
+{% endblock %}

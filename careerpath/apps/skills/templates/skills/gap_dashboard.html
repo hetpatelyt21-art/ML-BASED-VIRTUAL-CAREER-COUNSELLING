@@ -1,0 +1,44 @@
+{% extends "website/base.html" %}
+
+{% block title %}Skill Gap | Mentoraa{% endblock %}
+
+{% block content %}
+<section class="section-box section-zoom">
+  <div class="container">
+    <h2>Skill Gap Analysis</h2>
+    {% if report %}
+      <p class="section-intro">Your readiness for {{ report.target_role }} is based on required role skills and your current evidence.</p>
+      <div class="result-stats">
+        <div class="stat-chip"><span class="stat-label">Readiness</span><strong>{{ report.readiness_percentage }}%</strong></div>
+        <div class="stat-chip"><span class="stat-label">Missing Skills</span><strong>{{ report.missing_skills|length }}</strong></div>
+      </div>
+      <div class="progress-bar large"><span style="width: {{ report.readiness_percentage }}%"></span></div>
+      <div class="insight-card">
+        <h4>Priority Skills</h4>
+        <ul class="priority-list">
+          {% for item in report.priority_plan %}
+            <li>
+              <strong>{{ item.skill }}</strong>
+              <span>{{ item.current_level }}/{{ item.required_level }} · {{ item.priority|title }}</span>
+              <p>{{ item.next_action }}</p>
+            </li>
+          {% endfor %}
+        </ul>
+      </div>
+      <div class="insight-card">
+        <h4>Improvement Suggestions</h4>
+        <ul class="prediction-list">
+          {% for suggestion in report.suggestions %}
+            <li>{{ suggestion }}</li>
+          {% endfor %}
+        </ul>
+      </div>
+    {% else %}
+      <div class="result-card">
+        <p>Complete an assessment to generate your skill gap report.</p>
+        <a href="{% url 'basic_test' %}" class="btn">Start Assessment</a>
+      </div>
+    {% endif %}
+  </div>
+</section>
+{% endblock %}

@@ -1,0 +1,40 @@
+{% extends "website/base.html" %}
+
+{% block title %}Basic Career Test | Mentoraa{% endblock %}
+
+{% block content %}
+  <section class="section-box section-zoom">
+    <div class="container">
+      <button type="button" class="back-button section-back-button" onclick="goBack('{% url 'home' %}')">
+        <i class="fas fa-arrow-left"></i> Back
+      </button>
+      <h2>Basic Career Assessment</h2>
+      <p class="section-intro">Answer all 20 questions below. The prediction model will compare your responses with the CSV training data and estimate your strongest career domain.</p>
+
+      <form method="post" class="assessment-form">
+        {% csrf_token %}
+        <div class="assessment-legend">
+          <span>1 = Strongly Disagree</span>
+          <span>5 = Strongly Agree</span>
+        </div>
+        {% for field in form %}
+          <div class="question-card">
+            <label>{{ forloop.counter }}. {{ field.label }}</label>
+            <div class="scale">
+              {% for radio in field %}
+                <label class="scale-option">
+                  {{ radio.tag }}
+                  <span class="scale-pill">{{ radio.choice_label }}</span>
+                </label>
+              {% endfor %}
+            </div>
+          </div>
+        {% endfor %}
+
+        <div class="form-actions">
+          <button type="submit" class="btn-bordered">Submit 20 Answers &amp; Continue</button>
+        </div>
+      </form>
+    </div>
+  </section>
+{% endblock %}

@@ -1,0 +1,20 @@
+{% extends "website/base.html" %}
+
+{% block title %}Resume Builder | Mentoraa{% endblock %}
+
+{% block content %}
+<section class="auth-section">
+  <div class="auth-box auth-box-wide">
+    <h2>Edit Resume</h2>
+    <form method="post" class="auth-form">
+      {% csrf_token %}
+      {% for field in form %}
+        <label class="form-label" for="{{ field.id_for_label }}">{{ field.label }}</label>
+        {{ field.errors }}
+        {{ field }}
+      {% endfor %}
+      <button class="btn" type="submit">Save Resume</button>
+    </form>
+  </div>
+</section>
+{% endblock %}

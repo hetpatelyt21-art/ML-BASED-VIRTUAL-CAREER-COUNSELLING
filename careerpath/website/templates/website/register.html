@@ -1,0 +1,26 @@
+{% extends "website/base.html" %}
+
+{% block title %}Register | Mentoraa{% endblock %}
+
+{% block content %}
+  <section class="auth-section">
+    <div class="auth-box auth-box-wide">
+      <button type="button" class="back-button auth-back-button" onclick="goBack('{% url 'home' %}')">
+        <i class="fas fa-arrow-left"></i> Back
+      </button>
+      <h2>Create Your Account</h2>
+      <p>Register once to save your assessment history and personalize your profile.</p>
+      <form class="auth-form" method="post">
+        {% csrf_token %}
+        {{ form.non_field_errors }}
+        {% for field in form %}
+          <label for="{{ field.id_for_label }}" class="form-label">{{ field.label }}</label>
+          {{ field.errors }}
+          {{ field }}
+        {% endfor %}
+        <button type="submit" class="btn">Register</button>
+        <p class="auth-switch">Already have an account? <a href="{% url 'login' %}">Login</a></p>
+      </form>
+    </div>
+  </section>
+{% endblock %}

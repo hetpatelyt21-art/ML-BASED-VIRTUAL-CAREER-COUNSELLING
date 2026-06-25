@@ -1,0 +1,38 @@
+{% extends "website/base.html" %}
+
+{% block title %}Dashboard | Mentoraa{% endblock %}
+
+{% block content %}
+<section class="section-box section-zoom">
+  <div class="container">
+    <h2>Progress Dashboard</h2>
+    <p class="section-intro">Your career progression pipeline: assessment, roadmap, skills, projects, resume, and opportunities.</p>
+    <div class="result-stats">
+      <div class="stat-chip"><span class="stat-label">Roadmap</span><strong>{% if roadmap %}{{ roadmap.completion_percentage }}%{% else %}0%{% endif %}</strong></div>
+      <div class="stat-chip"><span class="stat-label">Skill Readiness</span><strong>{% if skill_report %}{{ skill_report.readiness_percentage }}%{% else %}0%{% endif %}</strong></div>
+      <div class="stat-chip"><span class="stat-label">Resume Score</span><strong>{% if latest_resume %}{{ latest_resume.ats_score }}%{% else %}Not analyzed{% endif %}</strong></div>
+      <div class="stat-chip"><span class="stat-label">Resume Change</span><strong>{{ resume_delta }}</strong></div>
+    </div>
+    <div class="dashboard-actions">
+      <a href="{% url 'roadmap_dashboard' %}" class="btn-bordered">Roadmap</a>
+      <a href="{% url 'skill_gap_dashboard' %}" class="btn-bordered">Skills</a>
+      <a href="{% url 'resume_analyzer' %}" class="btn-bordered">Resume Analyzer</a>
+      <a href="{% url 'resume_edit' %}" class="btn-bordered">Resume Builder</a>
+    </div>
+    {% if roadmap %}
+      <div class="insight-card">
+        <h4>This Week</h4>
+        <ul class="prediction-list">
+          {% for month in roadmap.months.all %}
+            {% for task in month.tasks.all %}
+              {% if not task.completed %}
+                <li>Week {{ task.week_number }}: {{ task.title }}</li>
+              {% endif %}
+            {% endfor %}
+          {% endfor %}
+        </ul>
+      </div>
+    {% endif %}
+  </div>
+</section>
+{% endblock %}

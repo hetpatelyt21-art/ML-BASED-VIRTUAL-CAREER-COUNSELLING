@@ -1,0 +1,50 @@
+{% extends "website/base.html" %}
+
+{% block title %}Roadmap | Mentoraa{% endblock %}
+
+{% block content %}
+<section class="section-box section-zoom">
+  <div class="container">
+    <h2>Career Roadmap</h2>
+    {% if roadmap %}
+      <p class="section-intro">{{ roadmap.summary }}</p>
+      <div class="result-stats">
+        <div class="stat-chip"><span class="stat-label">Target Role</span><strong>{{ roadmap.target_role }}</strong></div>
+        <div class="stat-chip"><span class="stat-label">Progress</span><strong>{{ roadmap.completion_percentage }}%</strong></div>
+        <div class="stat-chip"><span class="stat-label">Level</span><strong>{{ roadmap.current_level|title }}</strong></div>
+      </div>
+      <div class="roadmap-grid">
+        {% for month in roadmap.months.all %}
+          <div class="insight-card roadmap-month">
+            <h4>Month {{ month.month_number }}: {{ month.title }}</h4>
+            <div class="progress-bar"><span style="width: {{ month.completion_percentage }}%"></span></div>
+            <p>{{ month.focus }}</p>
+            <ul class="task-list">
+              {% for task in month.tasks.all %}
+                <li class="{% if task.completed %}task-done{% endif %}">
+                  <form method="post" action="{% url 'roadmap_task_toggle' task.id %}">
+                    {% csrf_token %}
+                    <button type="submit" class="task-check" aria-label="Toggle {{ task.title }}">
+                      {% if task.completed %}<i class="fas fa-check"></i>{% endif %}
+                    </button>
+                  </form>
+                  <div>
+                    <strong>Week {{ task.week_number }}: {{ task.title }}</strong>
+                    <span>{{ task.get_task_type_display }}</span>
+                    <p>{{ task.description }}</p>
+                  </div>
+                </li>
+              {% endfor %}
+            </ul>
+          </div>
+        {% endfor %}
+      </div>
+    {% else %}
+      <div class="result-card">
+        <p>Complete an assessment to generate your 3-month career progression roadmap.</p>
+        <a href="{% url 'basic_test' %}" class="btn">Start Assessment</a>
+      </div>
+    {% endif %}
+  </div>
+</section>
+{% endblock %}

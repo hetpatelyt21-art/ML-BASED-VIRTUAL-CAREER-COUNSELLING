@@ -1,0 +1,53 @@
+{% extends "website/base.html" %}
+
+{% block title %}Resume Preview | Mentoraa{% endblock %}
+
+{% block content %}
+<section class="section-box section-zoom">
+  <div class="container">
+    <h2>{{ request.user.get_full_name|default:request.user.username }}</h2>
+    <p class="section-intro">{{ profile.headline }}</p>
+    <div class="profile-summary">
+      <p>{{ profile.summary }}</p>
+      <p>{{ profile.location }}</p>
+      <p>{{ profile.phone }}</p>
+      <div class="form-actions">
+        <a class="btn-bordered" href="{% url 'resume_download_docx' %}">Download DOCX</a>
+        <a class="btn-bordered" href="{% url 'resume_download_pdf' %}">Download PDF</a>
+      </div>
+    </div>
+    <div class="profile-results-grid">
+      <div class="profile-summary">
+        <h3>Education</h3>
+        <a class="btn" href="{% url 'education_add' %}">Add Education</a>
+        <ul class="history-list">
+          {% for item in profile.education_items.all %}
+            <li>
+              <strong>{{ item.institution }}</strong>
+              <span>{{ item.degree }}</span>
+              <a class="btn" href="{% url 'education_edit' item.pk %}">Edit</a>
+            </li>
+          {% empty %}
+            <li><span>No education items yet.</span></li>
+          {% endfor %}
+        </ul>
+      </div>
+      <div class="profile-summary">
+        <h3>Experience</h3>
+        <a class="btn" href="{% url 'experience_add' %}">Add Experience</a>
+        <ul class="history-list">
+          {% for item in profile.experience_items.all %}
+            <li>
+              <strong>{{ item.title }}</strong>
+              <span>{{ item.organization }}</span>
+              <a class="btn" href="{% url 'experience_edit' item.pk %}">Edit</a>
+            </li>
+          {% empty %}
+            <li><span>No experience items yet.</span></li>
+          {% endfor %}
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+{% endblock %}

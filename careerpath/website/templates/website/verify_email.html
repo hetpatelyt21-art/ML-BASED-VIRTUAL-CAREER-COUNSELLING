@@ -1,0 +1,28 @@
+{% extends "website/base.html" %}
+
+{% block title %}Verify Email | Mentoraa{% endblock %}
+
+{% block content %}
+  <section class="auth-section">
+    <div class="auth-box">
+      <button type="button" class="back-button auth-back-button" onclick="goBack('{% url 'login' %}')">
+        <i class="fas fa-arrow-left"></i> Back
+      </button>
+      <h2>Verify Your Email</h2>
+      <p>Enter the 6-digit code sent to {{ user_to_verify.email }}. It expires in 10 minutes.</p>
+      <form class="auth-form" method="post">
+        {% csrf_token %}
+        {{ form.non_field_errors }}
+        {% for field in form %}
+          {{ field.errors }}
+          {{ field }}
+        {% endfor %}
+        <button type="submit" class="btn">Verify Email</button>
+      </form>
+      <form class="auth-form" method="post" action="{% url 'resend_otp' user_to_verify.pk %}">
+        {% csrf_token %}
+        <button type="submit" class="btn-bordered">Resend OTP</button>
+      </form>
+    </div>
+  </section>
+{% endblock %}
